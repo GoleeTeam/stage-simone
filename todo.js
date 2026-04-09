@@ -24,6 +24,7 @@ if (fs.existsSync(FILE)) {
 }
 
 function saveTasks() {
+    tasks.sort((a, b) => a.status - b.status);
   fs.writeFileSync(FILE, JSON.stringify(tasks, null, 2));
 }
 
@@ -43,29 +44,15 @@ function showTasks() {
   menu();
 }
 
-function menu() {
-
-  console.log("\nTODO LIST")
-  console.log("1. Mostra tasks")
-  console.log("2. Aggiungi task")
-  console.log("3. Elimina task")
-  console.log("4. Esci")
-
-  rl.question("Scelta: ", (choice) => {
-
-    if (choice == 1) showTasks()
-    else if (choice == 2) addTask()
-    else if (choice == 3) removeTask()
-    else if (choice == 4) rl.close()
-    else menu()
-
-  })
-
-}
 function showTasks() {
-  console.log("\nTODO LIST:");
+  printTask()
+  menu();
+}
 
-  if (tasks.length === 0) {
+function printTask()
+{
+    console.log("\nTODO LIST:");
+    if (tasks.length === 0) {
     console.log("Non ci sono task!");
   } else {
     tasks.forEach((task, index) => {
@@ -75,7 +62,6 @@ function showTasks() {
       console.log(`${index}: ${task.nome} [${statusText}]`);
     });
   }
-  menu();
 }
 
 function addTask() {
@@ -93,10 +79,12 @@ function addTask() {
 }
 
 function removeTask() {
+  printTask()
   rl.question("Indice task da eliminare: ", (i) => {
     const index = parseInt(i);
     if (isNaN(index) || index < 0 || index >= tasks.length) {
       console.log("Indice non valido!");
+      removeTask()
     } else {
       const removed = tasks.splice(index, 1);
       saveTasks();
@@ -107,6 +95,7 @@ function removeTask() {
 }
 
 function updateStatus() {
+    printTask()
   rl.question("Indice task da aggiornare: ", (i) => {
     const index = parseInt(i);
     if (isNaN(index) || index < 0 || index >= tasks.length) {
@@ -114,8 +103,8 @@ function updateStatus() {
       return updateStatus();
     }
 
-    console.log(task[i]);
-    console.log("Seleziona nuovo status:");
+
+    console.log("Seleziona nuovo status per la task '" + tasks[index].nome + "':");
     console.log("0 = TO DO");
     console.log("1 = IN PROGRESS");
     console.log("2 = FINISHED");
