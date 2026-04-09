@@ -1,15 +1,19 @@
+//required file sistem for the json
 const fs = require("fs");
+//required the module input output in the terminal
 const readline = require("readline")
-
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 })
 
+//file json
 const FILE = "task.json";
 
+//task array
 let tasks = []
 
+//data persistence
 if (fs.existsSync(FILE)) {
   try {
     const data = fs.readFileSync(FILE, "utf8");
@@ -23,32 +27,19 @@ if (fs.existsSync(FILE)) {
   fs.writeFileSync(FILE, JSON.stringify(tasks, null, 2));
 }
 
+//saving data
 function saveTasks() {
     tasks.sort((a, b) => a.status - b.status);
   fs.writeFileSync(FILE, JSON.stringify(tasks, null, 2));
 }
 
-function showTasks() {
-  console.log("\nTODO LIST:");
-
-  if (tasks.length === 0) {
-    console.log("Non ci sono task!");
-  } else {
-    tasks.forEach((task, index) => {
-      const statusText = task.status === 0 ? "TO DO" :
-                         task.status === 1 ? "IN PROGRESS" :
-                         "FINISHED";
-      console.log(`${index}: [${statusText}] ${task.nome}`);
-    });
-  }
-  menu();
-}
-
+//show all the data
 function showTasks() {
   printTask()
   menu();
 }
 
+//splitted function for refactoring
 function printTask()
 {
     console.log("\nTODO LIST:");
@@ -64,6 +55,7 @@ function printTask()
   }
 }
 
+//add a new task
 function addTask() {
   rl.question("Nome task: ", (nome) => {
     if (!nome.trim()) {
@@ -78,6 +70,7 @@ function addTask() {
   });
 }
 
+//remove an existing task
 function removeTask() {
   printTask()
   rl.question("Indice task da eliminare: ", (i) => {
@@ -94,6 +87,7 @@ function removeTask() {
   });
 }
 
+//update the task status for a existing task 
 function updateStatus() {
     printTask()
   rl.question("Indice task da aggiornare: ", (i) => {
@@ -102,7 +96,6 @@ function updateStatus() {
       console.log("Indice non valido!");
       return updateStatus();
     }
-
 
     console.log("Seleziona nuovo status per la task '" + tasks[index].nome + "':");
     console.log("0 = TO DO");
@@ -123,6 +116,7 @@ function updateStatus() {
   });
 }
 
+//selection menu
 function menu() {
   console.log("\nMENU:");
   console.log("1. Mostra task");
