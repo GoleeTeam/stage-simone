@@ -1,6 +1,14 @@
-//const {readFile, readFileSync} = require('fs');
-//const txt = readFileSync('./sas.txt','utf8');
+const readline = require("readline")
 
-const mymodule = require('./mymodule');
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+})
 
-console.log(mymodule);
+rl.question("Inserisci un numero? ", (n) => {
+  if(n%2==0)
+    console.log("pari")
+  else 
+    console.log("dispari")
+  rl.close()
+})
