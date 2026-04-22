@@ -1,0 +1,34 @@
+500 Can't connect to -:80 (Name or service not known)
+Content-Type: text/plain
+Client-Date: Wed, 22 Apr 2026 18:18:07 GMT
+Client-Warning: Internal response
+
+200 OK
+Cache-Control: max-age=490
+Connection: close
+Date: Wed, 22 Apr 2026 18:18:07 GMT
+Content-Type: text/html; charset=UTF-8
+Expires: Wed, 22 Apr 2026 18:26:17 GMT
+Last-Modified: Wed, 22 Apr 2026 18:09:57 UTC
+Alt-Svc: h3=":443"; ma=93600
+Client-Date: Wed, 22 Apr 2026 18:18:08 GMT
+Client-Peer: 104.85.10.103:443
+Client-Response-Num: 1
+Client-SSL-Cert-Issuer: /C=US/O=DigiCert Inc/CN=DigiCert Global G2 TLS RSA SHA256 2020 CA1
+Client-SSL-Cert-Subject: /C=US/ST=California/L=Redwood City/O=Electronic Arts Inc./CN=starwarssquadrongame.com
+Client-SSL-Cipher: TLS_AES_256_GCM_SHA384
+Client-SSL-Socket-Class: IO::Socket::SSL
+Client-SSL-Version: TLSv1_3
+Content-Security-Policy: frame-ancestors 'self'
+Set-Cookie: jobs-locale=en; SameSite=Strict; Path=/; Secure
+Set-Cookie: PLAY_LANG=en-US; SameSite=Lax; Path=/
+Set-Cookie: EDGESCAPE_COUNTRY=IT; path=/
+Set-Cookie: EDGESCAPE_REGION=25; path=/
+Set-Cookie: EDGESCAPE_TIMEZONE=GMT+1; path=/
+Set-Cookie: ealocale=en-us; expires=Thu, 22-Apr-2027 18:18:07 GMT; path=/; domain=.ea.com; secure
+Strict-Transport-Security: max-age=15768000
+X-Application-Context: eacom
+X-Environment-Context: prod
+X-Frame-Options: SAMEORIGIN
+X-L-Path: inert
+
