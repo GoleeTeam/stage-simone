@@ -6,85 +6,76 @@ import { FilterCatDto } from './dto/filterCatColor.dto';
 import { v4 as uuid } from 'uuid';
 import { NotFoundException } from '@nestjs/common';
 import { ColorNotFoundException } from './exceptions/color-not-found.exception'
+import { CatsRepository } from './repo/cats.repository'
 
 
 @Injectable()
 export class CatsService {
-  private readonly catsById: Map<string,Cat> = new Map<string,Cat>();
-  private readonly catsByColor: Map<CatColor, Set<string>> = new Map();
+  constructor(private readonly repo: CatsRepository) {}
 
   create(catDto: CreateCatDto) {
+    
     const newCat: Cat = {
     id: uuid(),
     name: catDto.name,
     age: catDto.age,
     color: catDto.color,
   };
-  this.catsById.set(newCat.id, newCat)
+  
+  this.repo.save(newCat);
 
-  this.AddcatsByColor(newCat);
   return {message:"cat created", id:newCat.id};
 }
 
   update(id:string, CatDto: CreateCatDto) {
-    const cat = this.catsById.get(id);
+    const cat = this.repo.findOne(id);
     if (!cat)
     {
       throw new NotFoundException(`Cat with id ${id} not found`);
     } 
 
-    const updatedCat : Cat={
+    const toUpdateCat : Cat={
       id: cat.id,
       name: CatDto.name,
       age: CatDto.age,
       color: CatDto.color,
     };
-    this.catsById.set(id, updatedCat);
     
-    this.catsByColor.get(cat.color)?.delete(id);
-    this.AddcatsByColor(updatedCat);
+    this.repo.update(toUpdateCat.id, toUpdateCat);
   
     return {message:"cat updated",id:id};
   };
 
-  AddcatsByColor(cat:Cat)
-  {
-    if (!this.catsByColor.has(cat.color)) {
-      this.catsByColor.set(cat.color, new Set());
-    }
-    this.catsByColor.get(cat.color)!.add(cat.id);
+  remove(id: string) {
+    const cat = this.repo.findOne(id);
+    if (!cat)
+    {
+      throw new NotFoundException(`Cat with id ${id} not found`);
+    } 
+    this.repo.remove(id,cat);
+	  return {message: 'Cat deleted', id};
   }
 
   findAll() {
-    return Array.from(this.catsById.values());
+    return this.repo.findAll();
   }
 
-  findByColor(color:CatColor){
-    const ids = this.catsByColor.get(color);
-    if (!ids || ids.size === 0)
-    {
+  filterByColor(color:CatColor){
+    const cats = this.repo.filterByColor(color);
+
+    if (cats.length === 0) {
       throw new ColorNotFoundException(color);
     }
-    return Array.from(ids).map(id => this.catsById.get(id)!);
+
+    return cats;
   }
 
   findOne(id: string){
-    const cat = this.catsById.get(id);
+    const cat = this.repo.findOne(id);
     if (!cat)
     {
       throw new NotFoundException(`Cat with id ${id} not found`);
     }
     return cat;
-  }
-
-  remove(id: string) {
-    const cat = this.catsById.get(id);
-    if (!cat)
-    {
-       throw new NotFoundException(`Cat with id ${id} not found`);
-    }
-    this.catsById.delete(id);
-    this.catsByColor.get(cat.color)?.delete(id);
-	  return {message: 'Cat deleted', id};
   }
 }

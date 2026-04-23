@@ -18,7 +18,7 @@ export class CatsController {
   @Get('search')
   findByColor(@Query() query : FilterCatDto){
     console.log('findByColor');
-    return this.catsService.findByColor(query.color);
+    return this.catsService.filterByColor(query.color);
   }
 
   @Get(':id')
