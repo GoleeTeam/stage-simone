@@ -24,8 +24,6 @@ export class CatsController {
   @Get(':id')
   findOne(@Param('id',ParseUUIDPipe) id: string){
     console.log('findOne', id);
-    if(!id)
-      return 'id is required';
     return this.catsService.findOne(id);
   }
 
@@ -44,6 +42,7 @@ export class CatsController {
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     console.log('delete');
+
     return this.catsService.remove(id);
   }
 }
