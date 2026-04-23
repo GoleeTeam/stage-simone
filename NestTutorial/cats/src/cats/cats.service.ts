@@ -55,6 +55,7 @@ export class CatsService {
     console.log('delete');
     
     const index = this.cats.findIndex(cat => cat.id === id);
+
     if (index === -1) {
       return "this cat don't exist";
     }

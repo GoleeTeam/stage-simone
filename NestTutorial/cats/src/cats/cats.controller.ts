@@ -3,6 +3,7 @@ import { CreateCatDto } from './createCat.dto';
 import { FilterCatDto } from './filterCatColor.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './cat.interface';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 @Controller('cats')
 export class CatsController {
@@ -21,7 +22,7 @@ export class CatsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string){
+  findOne(@Param('id',ParseUUIDPipe) id: string){
     console.log('findOne', id);
     if(!id)
       return 'id is required';
@@ -35,18 +36,14 @@ export class CatsController {
   }
 
   @Put(':id')
-  update(@Param('id') id:string, @Body() CreateCatDto: CreateCatDto) {
+  update(@Param('id', ParseUUIDPipe) id:string, @Body() CreateCatDto: CreateCatDto) {
     console.log('updateDto');
-    if(!id)
-      return 'id is required';
     return this.catsService.update(id, CreateCatDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     console.log('delete');
-    if(!id)
-      return 'id is required';
     return this.catsService.remove(id);
   }
 }
