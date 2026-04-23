@@ -43,7 +43,6 @@ export class CatsController {
     return this.catsService.update(id, CreateCatDto);
   }
 
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     console.log('delete');

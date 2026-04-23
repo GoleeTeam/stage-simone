@@ -50,16 +50,15 @@ export class CatsService {
     return "cat don't exist";
   }
 
-
   remove(id: string) {
     console.log('delete');
     
     const index = this.cats.findIndex(cat => cat.id === id);
     if (index === -1) {
-    return "this cat don't exist";
+      return "this cat don't exist";
     }
     this.cats.splice(index, 1);
 	
-	return {message: 'Cat deleted', id};
-    }
+	  return {message: 'Cat deleted', id};
+  }
 }
