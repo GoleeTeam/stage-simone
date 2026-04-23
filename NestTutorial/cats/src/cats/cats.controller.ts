@@ -10,7 +10,7 @@ export class CatsController {
   constructor(private catsService: CatsService) {}
 
   @Get()
-  async findAll(): Promise<Cat[]> {
+  async findAll() {
     console.log('findAll');
     return this.catsService.findAll();
   }
@@ -42,7 +42,6 @@ export class CatsController {
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     console.log('delete');
-
     return this.catsService.remove(id);
   }
 }
