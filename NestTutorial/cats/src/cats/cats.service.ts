@@ -4,11 +4,14 @@ import { CreateCatDto } from './dto/createCat.dto';
 import { CatColor } from "./enum/cats.color.enum";
 import { FilterCatDto } from './dto/filterCatColor.dto';
 import { v4 as uuid } from 'uuid';
+import { NotFoundException } from '@nestjs/common';
+import { ColorNotFoundException } from './exceptions/color-not-found.exception'
+
 
 @Injectable()
 export class CatsService {
   private readonly catsById: Map<string,Cat> = new Map<string,Cat>();
-  private readonly catsByColor: Map<string, Set<string>> = new Map<string, Set<string>>();
+  private readonly catsByColor: Map<CatColor, Set<string>> = new Map();
 
   create(catDto: CreateCatDto) {
     const newCat: Cat = {
@@ -19,29 +22,32 @@ export class CatsService {
   };
   this.catsById.set(newCat.id, newCat)
 
-  this.controlledAddIncatsByColor(newCat);
+  this.AddcatsByColor(newCat);
   return {message:"cat created", id:newCat.id};
 }
 
-  update(id:string, createCatDto: CreateCatDto) {
+  update(id:string, CatDto: CreateCatDto) {
     const cat = this.catsById.get(id);
-    if (!cat) return { message: "this cat doesn't exist" }; 
+    if (!cat)
+    {
+      throw new NotFoundException(`Cat with id ${id} not found`);
+    } 
 
     const updatedCat : Cat={
       id: cat.id,
-      name: createCatDto.name,
-      age: createCatDto.age,
-      color: createCatDto.color,
+      name: CatDto.name,
+      age: CatDto.age,
+      color: CatDto.color,
     };
     this.catsById.set(id, updatedCat);
     
     this.catsByColor.get(cat.color)?.delete(id);
-    this.controlledAddIncatsByColor(updatedCat);
+    this.AddcatsByColor(updatedCat);
   
     return {message:"cat updated",id:id};
   };
 
-  controlledAddIncatsByColor(cat:Cat)
+  AddcatsByColor(cat:Cat)
   {
     if (!this.catsByColor.has(cat.color)) {
       this.catsByColor.set(cat.color, new Set());
@@ -55,19 +61,28 @@ export class CatsService {
 
   findByColor(color:CatColor){
     const ids = this.catsByColor.get(color);
-    if (!ids) return 'no cats with this color';
+    if (!ids || ids.size === 0)
+    {
+      throw new ColorNotFoundException(color);
+    }
     return Array.from(ids).map(id => this.catsById.get(id)!);
   }
 
   findOne(id: string){
     const cat = this.catsById.get(id);
-    if (!cat) return "this cat don't exist"; 
-    return this.catsById.get(id);
+    if (!cat)
+    {
+      throw new NotFoundException(`Cat with id ${id} not found`);
+    }
+    return cat;
   }
 
   remove(id: string) {
     const cat = this.catsById.get(id);
-    if (!cat) return "this cat don't exist"; 
+    if (!cat)
+    {
+       throw new NotFoundException(`Cat with id ${id} not found`);
+    }
     this.catsById.delete(id);
     this.catsByColor.get(cat.color)?.delete(id);
 	  return {message: 'Cat deleted', id};
