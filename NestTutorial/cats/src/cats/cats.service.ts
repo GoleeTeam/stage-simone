@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Cat } from './cat.interface';
-import { CreateCatDto } from './createCat.dto';
-import { CatColor } from "./cats.color.enum";
-import { FilterCatDto } from './filterCatColor.dto';
+import { Cat } from './interface/cat.interface';
+import { CreateCatDto } from './dto/createCat.dto';
+import { CatColor } from "./enum/cats.color.enum";
+import { FilterCatDto } from './dto/filterCatColor.dto';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()

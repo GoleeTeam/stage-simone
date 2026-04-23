@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Query, Put, Delete, Param} from '@nestjs/common';
-import { CreateCatDto } from './createCat.dto';
-import { FilterCatDto } from './filterCatColor.dto';
+import { CreateCatDto } from './dto/createCat.dto';
+import { FilterCatDto } from './dto/filterCatColor.dto';
 import { CatsService } from './cats.service';
-import { Cat } from './cat.interface';
+import { Cat } from './interface/cat.interface';
 import { ParseUUIDPipe } from '@nestjs/common';
 
 @Controller('cats')
