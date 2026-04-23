@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Cat } from './cat.interface';
 import { CreateCatDto } from './createCat.dto';
+import { CatColor } from "./cats.color.enum";
+import { FilterCatDto } from './filterCatColor.dto';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
@@ -8,15 +10,14 @@ export class CatsService {
   private readonly cats: Cat[] = [];
 
   create(createCatDto: CreateCatDto) {
-    const cat: Cat = {
+    const newCat: Cat = {
     id: uuid(),
     name: createCatDto.name,
     age: createCatDto.age,
     color: createCatDto.color,
   };
-
-  this.cats.push(cat);
-  return {message:"cat created", id:cat.id};
+  this.cats.push(newCat);
+  return {message:"cat created", id:newCat.id};
 }
 
   update(id:string, CreateCatDto: CreateCatDto) {
@@ -37,8 +38,8 @@ export class CatsService {
     return this.cats;
   }
 
-  findByColor(color:string){
-    return this.cats.filter(cat => cat.color?.toLowerCase() === color?.toLowerCase());
+  findByColor(color:CatColor){
+    return this.cats.filter(cat => cat.color === color);
   }
 
   findOne(id: string){

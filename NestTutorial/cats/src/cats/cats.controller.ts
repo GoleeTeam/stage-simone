@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Query, Put, Delete, Param} from '@nestjs/common';
 import { CreateCatDto } from './createCat.dto';
+import { FilterCatDto } from './filterCatColor.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './cat.interface';
 
@@ -14,11 +15,9 @@ export class CatsController {
   }
 
   @Get('search')
-  findByColor(@Query('color') color:string){
+  findByColor(@Query() query : FilterCatDto){
     console.log('findByColor');
-    if (!color)
-      return 'color is required';
-    return this.catsService.findByColor(color);
+    return this.catsService.findByColor(query.color);
   }
 
   @Get(':id')

@@ -1,4 +1,5 @@
-import { IsString, IsNotEmpty, IsNumber, IsBoolean } from "class-validator";
+import { IsString, IsNotEmpty, IsNumber, IsBoolean, IsEnum } from "class-validator";
+import { CatColor } from "./cats.color.enum";
 
 export class CreateCatDto {
   @IsString()
@@ -9,7 +10,7 @@ export class CreateCatDto {
   @IsNotEmpty()
   age: number;
 
-  @IsString()
+  @IsEnum(CatColor)
   @IsNotEmpty()
-  color: string;
+  color: CatColor;
 }
