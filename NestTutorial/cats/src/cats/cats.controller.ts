@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Query, Put, Delete, Param} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Query,
+  Put,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { CreateCatDto } from './dto/createCat.dto';
 import { FilterCatDto } from './dto/filterCatColor.dto';
 import { CatsService } from './cats.service';
@@ -16,13 +25,13 @@ export class CatsController {
   }
 
   @Get('search')
-  findByColor(@Query() query : FilterCatDto){
+  findByColor(@Query() query: FilterCatDto) {
     console.log('findByColor');
     return this.catsService.filterByColor(query.color);
   }
 
   @Get(':id')
-  findOne(@Param('id',ParseUUIDPipe) id: string){
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     console.log('findOne', id);
     return this.catsService.findOne(id);
   }
@@ -34,7 +43,10 @@ export class CatsController {
   }
 
   @Put(':id')
-  update(@Param('id', ParseUUIDPipe) id:string, @Body() CreateCatDto: CreateCatDto) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() CreateCatDto: CreateCatDto,
+  ) {
     console.log('updateDto');
     return this.catsService.update(id, CreateCatDto);
   }
