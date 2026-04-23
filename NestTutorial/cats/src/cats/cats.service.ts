@@ -19,23 +19,35 @@ export class CatsService {
   };
   this.catsById.set(newCat.id, newCat)
 
-  if (!this.catsByColor.has(newCat.color)) {
-    this.catsByColor.set(newCat.color, new Set());
-  }
-  
-  this.catsByColor.get(newCat.color)!.add(newCat.id);
+  this.controlledAddIncatsByColor(newCat);
   return {message:"cat created", id:newCat.id};
 }
 
-  update(id:string, CreateCatDto: CreateCatDto) {
+  update(id:string, createCatDto: CreateCatDto) {
     const cat = this.catsById.get(id);
-    if (!cat) return "this cat don't exist"; 
+    if (!cat) return { message: "this cat doesn't exist" }; 
+
+    const updatedCat : Cat={
+      id: cat.id,
+      name: createCatDto.name,
+      age: createCatDto.age,
+      color: createCatDto.color,
+    };
+    this.catsById.set(id, updatedCat);
     
-    cat.name=CreateCatDto.name;
-    cat.age=CreateCatDto.age;
-    cat.color=CreateCatDto.color;
+    this.catsByColor.get(cat.color)?.delete(id);
+    this.controlledAddIncatsByColor(updatedCat);
+  
     return {message:"cat updated",id:id};
   };
+
+  controlledAddIncatsByColor(cat:Cat)
+  {
+    if (!this.catsByColor.has(cat.color)) {
+      this.catsByColor.set(cat.color, new Set());
+    }
+    this.catsByColor.get(cat.color)!.add(cat.id);
+  }
 
   findAll() {
     return Array.from(this.catsById.values());
