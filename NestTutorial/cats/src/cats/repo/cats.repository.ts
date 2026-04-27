@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Cat } from '../interface/cat.interface';
-import { CatColor } from '../enum/cats.color.enum';
+import { Cat } from '../domain/cat.interface';
+import { CatColor } from '../domain/cats.color.enum';
 
 @Injectable()
-export class CatsRepository {
+export class CatsInMemoryRepository {
   private catsById = new Map<string, Cat>();
   private catsByColor = new Map<CatColor, Set<string>>();
 
@@ -21,7 +21,6 @@ export class CatsRepository {
 
   update(id: string, cat: Cat) {
     this.catsById.set(id, cat);
-
     this.catsByColor.get(cat.color)?.delete(id);
     this.AddcatsByColor(cat);
   }
@@ -43,7 +42,6 @@ export class CatsRepository {
   filterByColor(color: CatColor) {
     const ids = this.catsByColor.get(color);
     if (!ids) return [];
-
     return Array.from(ids).map((id) => this.catsById.get(id)!);
   }
 }

@@ -1,4 +1,4 @@
-import { CatColor } from '../enum/cats.color.enum';
+import { CatColor } from './cats.color.enum';
 
 export interface Cat {
   id: string;

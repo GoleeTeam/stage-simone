@@ -11,7 +11,7 @@ import {
 import { CreateCatDto } from './dto/createCat.dto';
 import { FilterCatDto } from './dto/filterCatColor.dto';
 import { CatsService } from './cats.service';
-import { Cat } from './interface/cat.interface';
+import { Cat } from './domain/cat.interface';
 import { ParseUUIDPipe } from '@nestjs/common';
 
 @Controller('cats')

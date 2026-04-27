@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { Cat } from './interface/cat.interface';
+import { Cat } from './domain/cat.interface';
 import { CreateCatDto } from './dto/createCat.dto';
-import { CatColor } from './enum/cats.color.enum';
+import { CatColor } from './domain/cats.color.enum';
 import { FilterCatDto } from './dto/filterCatColor.dto';
 import { v4 as uuid } from 'uuid';
 import { NotFoundException } from '@nestjs/common';
 import { ColorNotFoundException } from './exceptions/color-not-found.exception';
-import { CatsRepository } from './repo/cats.repository';
+import { CatsInMemoryRepository } from './repo/cats.repository';
 
 @Injectable()
 export class CatsService {
-  constructor(private readonly repo: CatsRepository) {}
+  constructor(private readonly repo: CatsInMemoryRepository) {}
 
   create(catDto: CreateCatDto) {
     const newCat: Cat = {
@@ -38,7 +38,7 @@ export class CatsService {
       color: CatDto.color,
     };
 
-    this.repo.update(toUpdateCat.id, toUpdateCat);
+    this.repo.update(toUpdateCat.id, toUpdateCat); //TODO e se facesse save?
 
     return { message: 'cat updated', id: id };
   }
@@ -60,7 +60,7 @@ export class CatsService {
     const cats = this.repo.filterByColor(color);
 
     if (cats.length === 0) {
-      throw new ColorNotFoundException(color);
+      throw new ColorNotFoundException(color); // restituire array vuoto e non errore
     }
 
     return cats;

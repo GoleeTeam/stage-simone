@@ -5,7 +5,7 @@ import {
   IsBoolean,
   IsEnum,
 } from 'class-validator';
-import { CatColor } from '../enum/cats.color.enum';
+import { CatColor } from '../domain/cats.color.enum';
 
 export class CreateCatDto {
   @IsString()

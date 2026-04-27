@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty } from 'class-validator';
-import { CatColor } from '../enum/cats.color.enum';
+import { CatColor } from '../domain/cats.color.enum';
 import { Transform } from 'class-transformer';
 
 export class FilterCatDto {
