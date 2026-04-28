@@ -21,9 +21,13 @@ export class CatsInMemoryRepository implements CatsRepository {
   }
 
   update(id: string, cat: Cat): void {
-    this.catsById.set(id, cat);
-    this.catsByColor.get(cat.color)?.delete(id);
-    this.addCatsByColor(cat);
+    const oldCat = this.catsById.get(id);
+
+    if (oldCat) {
+      this.catsByColor.get(oldCat.color)?.delete(id);
+    }
+
+    this.save(cat);
   }
 
   remove(id: string, color: CatColor): void {
@@ -43,6 +47,8 @@ export class CatsInMemoryRepository implements CatsRepository {
   filterByColor(color: CatColor): Cat[] {
     const ids = this.catsByColor.get(color);
     if (!ids) return [];
-    return Array.from(ids).map((id) => this.catsById.get(id)!);
+    return Array.from(ids)
+      .map((id) => this.catsById.get(id))
+      .filter((cat): cat is Cat => cat !== undefined);
   }
 }
