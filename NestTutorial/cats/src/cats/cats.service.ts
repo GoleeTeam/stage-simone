@@ -1,12 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { Cat } from './domain/cat.interface';
-import { CreateCatDto } from './dto/createCat.dto';
-import { CatColor } from './domain/cats.color.enum';
-import { FilterCatDto } from './dto/filterCatColor.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
-import { NotFoundException } from '@nestjs/common';
+import { Cat } from './domain/cat.interface';
+import { CatColor } from './domain/cats.color.enum';
+import { CreateCatDto } from './dto/createCat.dto';
 import { ColorNotFoundException } from './exceptions/color-not-found.exception';
-import { CatsInMemoryRepository } from './repo/cats.repository';
+import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
 
 @Injectable()
 export class CatsService {
@@ -25,7 +23,7 @@ export class CatsService {
     return { message: 'cat created', id: newCat.id };
   }
 
-  update(id: string, CatDto: CreateCatDto) {
+  update(id: string, catDto: CreateCatDto) {
     const cat = this.repo.findOne(id);
     if (!cat) {
       throw new NotFoundException(`Cat with id ${id} not found`);
@@ -33,14 +31,14 @@ export class CatsService {
 
     const toUpdateCat: Cat = {
       id: cat.id,
-      name: CatDto.name,
-      age: CatDto.age,
-      color: CatDto.color,
+      name: catDto.name,
+      age: catDto.age,
+      color: catDto.color,
     };
 
-    this.repo.update(toUpdateCat.id, toUpdateCat); //TODO e se facesse save?
+    this.repo.update(toUpdateCat.id, toUpdateCat);
 
-    return { message: 'cat updated', id: id };
+    return { message: 'cat updated', id };
   }
 
   remove(id: string) {
@@ -48,7 +46,9 @@ export class CatsService {
     if (!cat) {
       throw new NotFoundException(`Cat with id ${id} not found`);
     }
+
     this.repo.remove(id, cat.color);
+
     return { message: 'Cat deleted', id };
   }
 
@@ -60,7 +60,7 @@ export class CatsService {
     const cats = this.repo.filterByColor(color);
 
     if (cats.length === 0) {
-      throw new ColorNotFoundException(color); // restituire array vuoto e non errore
+      throw new ColorNotFoundException(color);
     }
 
     return cats;
@@ -71,6 +71,7 @@ export class CatsService {
     if (!cat) {
       throw new NotFoundException(`Cat with id ${id} not found`);
     }
+
     return cat;
   }
 }

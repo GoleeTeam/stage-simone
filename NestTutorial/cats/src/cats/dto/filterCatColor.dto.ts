@@ -1,10 +1,10 @@
+import { Transform } from 'class-transformer';
 import { IsEnum, IsNotEmpty } from 'class-validator';
 import { CatColor } from '../domain/cats.color.enum';
-import { Transform } from 'class-transformer';
 
 export class FilterCatDto {
-  @Transform(({ value }) => value.toLowerCase())
+  @Transform(({ value }: { value: string }) => value.toLowerCase())
   @IsEnum(CatColor)
   @IsNotEmpty()
-  color: CatColor;
+  color!: CatColor;
 }

@@ -1,13 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
-import { CatsService } from './cats.service';
-import { CatsInMemoryRepository } from './repo/cats.repository';
-import { CreateCatDto } from './dto/createCat.dto';
+import { Test, TestingModule } from '@nestjs/testing';
 import { Cat } from './domain/cat.interface';
 import { CatColor } from './domain/cats.color.enum';
+import { CreateCatDto } from './dto/createCat.dto';
 import { ColorNotFoundException } from './exceptions/color-not-found.exception';
+import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
+import { CatsService } from './cats.service';
 
-// UUID deterministici
 jest.mock('uuid', () => ({ v4: () => 'mock-uuid-1234' }));
 
 describe('CatsService', () => {
@@ -27,8 +26,8 @@ describe('CatsService', () => {
     color: CatColor.BLACK,
   };
 
-  beforeEach(async () => {
-    const Repo: jest.Mocked<CatsInMemoryRepository> = {
+  beforeAll(async () => {
+    const repoMock: jest.Mocked<CatsInMemoryRepository> = {
       save: jest.fn(),
       findOne: jest.fn(),
       findAll: jest.fn(),
@@ -40,7 +39,7 @@ describe('CatsService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CatsService,
-        { provide: CatsInMemoryRepository, useValue: Repo },
+        { provide: CatsInMemoryRepository, useValue: repoMock },
       ],
     }).compile();
 
@@ -48,7 +47,9 @@ describe('CatsService', () => {
     repo = module.get(CatsInMemoryRepository);
   });
 
-  //create
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 
   describe('create', () => {
     it('should save a new cat and return id', () => {
@@ -67,8 +68,6 @@ describe('CatsService', () => {
       });
     });
   });
-
-  //update
 
   describe('update', () => {
     it('should update an existing cat', () => {
@@ -107,8 +106,6 @@ describe('CatsService', () => {
     });
   });
 
-  //remove
-
   describe('remove', () => {
     it('should remove an existing cat', () => {
       repo.findOne.mockReturnValue(mockCat);
@@ -133,8 +130,6 @@ describe('CatsService', () => {
     });
   });
 
-  //findAll
-
   describe('findAll', () => {
     it('should return all cats', () => {
       const cats: Cat[] = [mockCat, { ...mockCat, id: '2', name: 'Luna' }];
@@ -147,8 +142,6 @@ describe('CatsService', () => {
       expect(result).toEqual(cats);
     });
   });
-
-  //filterByColor
 
   describe('filterByColor', () => {
     it('should return cats of given color', () => {
@@ -168,8 +161,6 @@ describe('CatsService', () => {
       );
     });
   });
-
-  //findOne
 
   describe('findOne', () => {
     it('should return a cat', () => {

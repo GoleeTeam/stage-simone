@@ -1,59 +1,52 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Query,
-  Put,
+  Controller,
   Delete,
+  Get,
   Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  Query,
 } from '@nestjs/common';
+import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/createCat.dto';
 import { FilterCatDto } from './dto/filterCatColor.dto';
-import { CatsService } from './cats.service';
-import { Cat } from './domain/cat.interface';
-import { ParseUUIDPipe } from '@nestjs/common';
 
 @Controller('cats')
 export class CatsController {
-  constructor(private catsService: CatsService) {}
+  constructor(private readonly catsService: CatsService) {}
 
   @Get()
-  async findAll() {
-    console.log('findAll');
+  findAll() {
     return this.catsService.findAll();
   }
 
   @Get('search')
   findByColor(@Query() query: FilterCatDto) {
-    console.log('findByColor');
     return this.catsService.filterByColor(query.color);
   }
 
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
-    console.log('findOne', id);
     return this.catsService.findOne(id);
   }
 
   @Post()
-  async create(@Body() createCatDto: CreateCatDto) {
-    console.log('create');
+  create(@Body() createCatDto: CreateCatDto) {
     return this.catsService.create(createCatDto);
   }
 
   @Put(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() CreateCatDto: CreateCatDto,
+    @Body() createCatDto: CreateCatDto,
   ) {
-    console.log('updateDto');
-    return this.catsService.update(id, CreateCatDto);
+    return this.catsService.update(id, createCatDto);
   }
 
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
-    console.log('delete');
     return this.catsService.remove(id);
   }
 }
