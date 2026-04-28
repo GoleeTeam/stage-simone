@@ -58,11 +58,6 @@ export class CatsService {
 
   filterByColor(color: CatColor) {
     const cats = this.repo.filterByColor(color);
-
-    if (cats.length === 0) {
-      throw new ColorNotFoundException(color);
-    }
-
     return cats;
   }
 
