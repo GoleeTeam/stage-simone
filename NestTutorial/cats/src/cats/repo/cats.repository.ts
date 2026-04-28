@@ -1,43 +1,18 @@
-/*import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Cat } from '../domain/cat.interface';
 import { CatColor } from '../domain/cats.color.enum';
+import { CatsModule } from '../cats.module';
 
-@Injectable()
 export interface CatsRepository {
-  private catsById : Map<string, Cat>;
-  private catsByColor : Map<CatColor, Set<string>>;
+  save(cat: Cat): void;
 
-  AddcatsByColor(cat: Cat) : null;
+  update(id: string, cat: Cat): void;
 
-  save(cat: Cat) {
-    this.catsById.set(cat.id, cat);
-    this.AddcatsByColor(cat);
-  }
+  remove(id: string, color: CatColor): void;
 
-  update(id: string, cat: Cat) {
-    this.catsById.set(id, cat);
-    this.catsByColor.get(cat.color)?.delete(id);
-    this.AddcatsByColor(cat);
-  }
+  findAll(): Cat[];
 
-  remove(id: string, color: CatColor) {
-    this.catsById.delete(id);
-    this.catsByColor.get(color)?.delete(id);
-  }
+  findOne(id: string): Cat | undefined;
 
-  findAll() {
-    return Array.from(this.catsById.values());
-  }
-
-  findOne(id: string) {
-    const cat = this.catsById.get(id);
-    return cat;
-  }
-
-  filterByColor(color: CatColor) {
-    const ids = this.catsByColor.get(color);
-    if (!ids) return [];
-    return Array.from(ids).map((id) => this.catsById.get(id)!);
-  }
+  filterByColor(color: CatColor): Cat[];
 }
-*/
