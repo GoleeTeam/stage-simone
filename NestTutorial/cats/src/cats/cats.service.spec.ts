@@ -153,12 +153,12 @@ describe('CatsService', () => {
       expect(result).toEqual([mockCat]);
     });
 
-    it('should throw if no cats found', () => {
+    it('should return []', () => {
       repo.filterByColor.mockReturnValue([]);
+      const result = service.filterByColor(CatColor.WHITE);
 
-      expect(() => service.filterByColor(CatColor.WHITE)).toThrow(
-        ColorNotFoundException,
-      );
+      expect(repo.filterByColor).toHaveBeenCalledWith(CatColor.WHITE);
+      expect(result).toEqual([]);
     });
   });
 
