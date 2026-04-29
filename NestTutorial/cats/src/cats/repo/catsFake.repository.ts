@@ -5,23 +5,31 @@ import { CatsRepository } from './cats.repository';
 
 @Injectable()
 export class CatsFakeRepository implements CatsRepository {
-  private addCatsByColor(cat: Cat): void {}
+  private cats: Cat[] = [];
 
-  save(cat: Cat): void {}
+  save(cat: Cat): void {
+    this.cats.push(cat);
+  }
 
-  update(id: string, cat: Cat): void {}
+  update(id: string, cat: Cat): void {
+    const index = this.cats.findIndex((c) => c.id === id);
+    if (index === -1) return;
+    this.cats[index] = cat;
+  }
 
-  remove(id: string, color: CatColor): void {}
+  remove(id: string): void {
+    this.cats = this.cats.filter((c) => c.id !== id);
+  }
 
   findAll(): Cat[] {
-    return [];
+    return this.cats;
   }
 
   findOne(id: string): Cat | undefined {
-    return undefined;
+    return this.cats.find((c) => c.id === id);
   }
 
   filterByColor(color: CatColor): Cat[] {
-    return [];
+    return this.cats.filter((c) => c.color === color);
   }
 }

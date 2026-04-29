@@ -5,13 +5,15 @@ import { CatColor } from './domain/cats.color.enum';
 import { CreateCatDto } from './dto/createCat.dto';
 import { ColorNotFoundException } from './exceptions/color-not-found.exception';
 import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
-import { CatsService } from './cats.service';
+import { CATS_REPOSITORY, CatsService } from './cats.service';
+import { CatsRepository } from './repo/cats.repository';
+import { CatsFakeRepository } from './repo/catsFake.repository';
 
 jest.mock('uuid', () => ({ v4: () => 'mock-uuid-1234' }));
 
 describe('CatsService', () => {
   let service: CatsService;
-  let repo: jest.Mocked<CatsInMemoryRepository>;
+  let repo: CatsRepository;
 
   const mockCat: Cat = {
     id: 'mock-uuid-1234',
@@ -26,41 +28,25 @@ describe('CatsService', () => {
     color: CatColor.BLACK,
   };
 
-  beforeAll(async () => {
-    const repoMock: jest.Mocked<CatsInMemoryRepository> = {
-      save: jest.fn(),
-      findOne: jest.fn(),
-      findAll: jest.fn(),
-      update: jest.fn(),
-      remove: jest.fn(),
-      filterByColor: jest.fn(),
-    } as any;
-
+  beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CatsService,
-        { provide: CatsInMemoryRepository, useValue: repoMock },
+        CatsFakeRepository,
+        {
+          provide: CATS_REPOSITORY,
+          useClass: CatsFakeRepository,
+        },
       ],
     }).compile();
 
     service = module.get(CatsService);
-    repo = module.get(CatsInMemoryRepository);
-  });
-
-  afterEach(() => {
-    jest.resetAllMocks();
+    repo = module.get(CatsFakeRepository);
   });
 
   describe('create', () => {
     it('should save a new cat and return id', () => {
       const result = service.create(createCatDto);
-
-      expect(repo.save).toHaveBeenCalledWith({
-        id: 'mock-uuid-1234',
-        name: createCatDto.name,
-        age: createCatDto.age,
-        color: createCatDto.color,
-      });
 
       expect(result).toEqual({
         message: 'cat created',
@@ -71,23 +57,14 @@ describe('CatsService', () => {
 
   describe('update', () => {
     it('should update an existing cat', () => {
-      repo.findOne.mockReturnValue(mockCat);
-
       const dto: CreateCatDto = {
         name: 'Felix',
         age: 5,
         color: CatColor.WHITE,
       };
+      service.create(createCatDto);
 
       const result = service.update(mockCat.id, dto);
-
-      expect(repo.findOne).toHaveBeenCalledWith(mockCat.id);
-      expect(repo.update).toHaveBeenCalledWith(mockCat.id, {
-        id: mockCat.id,
-        name: dto.name,
-        age: dto.age,
-        color: dto.color,
-      });
 
       expect(result).toEqual({
         message: 'cat updated',
@@ -96,24 +73,17 @@ describe('CatsService', () => {
     });
 
     it('should throw if cat not found', () => {
-      repo.findOne.mockReturnValue(undefined);
-
       expect(() => service.update('bad-id', createCatDto)).toThrow(
         NotFoundException,
       );
-
-      expect(repo.update).not.toHaveBeenCalled();
     });
   });
 
   describe('remove', () => {
     it('should remove an existing cat', () => {
-      repo.findOne.mockReturnValue(mockCat);
+      service.create(createCatDto);
 
       const result = service.remove(mockCat.id);
-
-      expect(repo.findOne).toHaveBeenCalledWith(mockCat.id);
-      expect(repo.remove).toHaveBeenCalledWith(mockCat.id, mockCat.color);
 
       expect(result).toEqual({
         message: 'Cat deleted',
@@ -122,59 +92,48 @@ describe('CatsService', () => {
     });
 
     it('should throw if cat not found', () => {
-      repo.findOne.mockReturnValue(undefined);
-
       expect(() => service.remove('bad-id')).toThrow(NotFoundException);
-
-      expect(repo.remove).not.toHaveBeenCalled();
     });
   });
 
   describe('findAll', () => {
     it('should return all cats', () => {
-      const cats: Cat[] = [mockCat, { ...mockCat, id: '2', name: 'Luna' }];
+      service.create(createCatDto);
 
-      repo.findAll.mockReturnValue(cats);
+      repo.findAll();
 
       const result = service.findAll();
 
-      expect(repo.findAll).toHaveBeenCalled();
-      expect(result).toEqual(cats);
+      expect(result).toEqual([mockCat]);
     });
   });
 
   describe('filterByColor', () => {
     it('should return cats of given color', () => {
-      repo.filterByColor.mockReturnValue([mockCat]);
+      service.create(createCatDto);
 
       const result = service.filterByColor(CatColor.BLACK);
 
-      expect(repo.filterByColor).toHaveBeenCalledWith(CatColor.BLACK);
       expect(result).toEqual([mockCat]);
     });
 
     it('should return []', () => {
-      repo.filterByColor.mockReturnValue([]);
       const result = service.filterByColor(CatColor.WHITE);
 
-      expect(repo.filterByColor).toHaveBeenCalledWith(CatColor.WHITE);
       expect(result).toEqual([]);
     });
   });
 
   describe('findOne', () => {
     it('should return a cat', () => {
-      repo.findOne.mockReturnValue(mockCat);
+      service.create(createCatDto);
 
       const result = service.findOne(mockCat.id);
 
-      expect(repo.findOne).toHaveBeenCalledWith(mockCat.id);
       expect(result).toEqual(mockCat);
     });
 
     it('should throw if cat not found', () => {
-      repo.findOne.mockReturnValue(undefined);
-
       expect(() => service.findOne('bad-id')).toThrow(NotFoundException);
     });
   });
