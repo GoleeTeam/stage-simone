@@ -1,14 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+export const CATS_REPOSITORY = 'CATS_REPOSITORY';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { Cat } from './domain/cat.interface';
 import { CatColor } from './domain/cats.color.enum';
 import { CreateCatDto } from './dto/createCat.dto';
-import { ColorNotFoundException } from './exceptions/color-not-found.exception';
-import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
+import { CatsRepository } from './repo/cats.repository';
 
 @Injectable()
 export class CatsService {
-  constructor(private readonly repo: CatsInMemoryRepository) {}
+  constructor(
+    @Inject(CATS_REPOSITORY)
+    private readonly repo: CatsRepository,
+  ) {}
 
   create(catDto: CreateCatDto) {
     const newCat: Cat = {
