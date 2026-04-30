@@ -8,6 +8,7 @@ import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
 import { CATS_REPOSITORY, CatsService } from './cats.service';
 import { CatsRepository } from './repo/cats.repository';
 import { CatsFakeRepository } from './repo/catsFake.repository';
+import { CATS_SERVICE } from './cats.controller';
 
 jest.mock('uuid', () => ({ v4: () => 'mock-uuid-1234' }));
 
@@ -15,7 +16,7 @@ describe('CatsService', () => {
   let service: CatsService;
   let repo: CatsRepository;
 
-  const mockCat: Cat = {
+  const catFixture: Cat = {
     id: 'mock-uuid-1234',
     name: 'Whiskers',
     age: 3,
@@ -31,8 +32,10 @@ describe('CatsService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        CatsService,
-        CatsFakeRepository,
+        {
+          provide: CATS_SERVICE,
+          useClass: CatsService,
+        },
         {
           provide: CATS_REPOSITORY,
           useClass: CatsFakeRepository,
@@ -40,8 +43,8 @@ describe('CatsService', () => {
       ],
     }).compile();
 
-    service = module.get(CatsService);
-    repo = module.get(CatsFakeRepository);
+    service = module.get(CATS_SERVICE);
+    repo = module.get(CATS_REPOSITORY);
   });
 
   describe('create', () => {
@@ -64,11 +67,11 @@ describe('CatsService', () => {
       };
       service.create(createCatDto);
 
-      const result = service.update(mockCat.id, dto);
+      const result = service.update(catFixture.id, dto);
 
       expect(result).toEqual({
         message: 'cat updated',
-        id: mockCat.id,
+        id: catFixture.id,
       });
     });
 
@@ -83,11 +86,11 @@ describe('CatsService', () => {
     it('should remove an existing cat', () => {
       service.create(createCatDto);
 
-      const result = service.remove(mockCat.id);
+      const result = service.remove(catFixture.id);
 
       expect(result).toEqual({
         message: 'Cat deleted',
-        id: mockCat.id,
+        id: catFixture.id,
       });
     });
 
@@ -104,7 +107,7 @@ describe('CatsService', () => {
 
       const result = service.findAll();
 
-      expect(result).toEqual([mockCat]);
+      expect(result).toEqual([catFixture]);
     });
   });
 
@@ -114,7 +117,7 @@ describe('CatsService', () => {
 
       const result = service.filterByColor(CatColor.BLACK);
 
-      expect(result).toEqual([mockCat]);
+      expect(result).toEqual([catFixture]);
     });
 
     it('should return []', () => {
@@ -128,9 +131,9 @@ describe('CatsService', () => {
     it('should return a cat', () => {
       service.create(createCatDto);
 
-      const result = service.findOne(mockCat.id);
+      const result = service.findOne(catFixture.id);
 
-      expect(result).toEqual(mockCat);
+      expect(result).toEqual(catFixture);
     });
 
     it('should throw if cat not found', () => {

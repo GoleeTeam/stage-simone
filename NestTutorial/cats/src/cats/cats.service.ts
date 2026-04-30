@@ -5,9 +5,12 @@ import { Cat } from './domain/cat.interface';
 import { CatColor } from './domain/cats.color.enum';
 import { CreateCatDto } from './dto/createCat.dto';
 import { CatsRepository } from './repo/cats.repository';
+import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
+import { CatsCrud } from './cats.crud';
+import { MessageCat } from './domain/messageCat.interface';
 
 @Injectable()
-export class CatsService {
+export class CatsService implements CatsCrud{
   constructor(
     @Inject(CATS_REPOSITORY)
     private readonly repo: CatsRepository,
@@ -23,7 +26,11 @@ export class CatsService {
 
     this.repo.save(newCat);
 
-    return { message: 'cat created', id: newCat.id };
+    const res: MessageCat = {
+      message:'cat created',
+      id: newCat.id 
+    }
+    return res;
   }
 
   update(id: string, catDto: CreateCatDto) {
@@ -41,7 +48,11 @@ export class CatsService {
 
     this.repo.update(toUpdateCat.id, toUpdateCat);
 
-    return { message: 'cat updated', id };
+    const res: MessageCat = {
+      message:'cat updated',
+      id: toUpdateCat.id 
+    }
+    return res;
   }
 
   remove(id: string) {
@@ -52,7 +63,11 @@ export class CatsService {
 
     this.repo.remove(id, cat.color);
 
-    return { message: 'Cat deleted', id };
+    const res: MessageCat = {
+      message:'Cat deleted',
+      id: id 
+    }
+    return res;
   }
 
   findAll() {

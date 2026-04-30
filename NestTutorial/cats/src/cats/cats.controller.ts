@@ -1,8 +1,10 @@
+export const CATS_SERVICE = 'CATS_SERVICE';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   ParseUUIDPipe,
   Post,
@@ -12,10 +14,14 @@ import {
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/createCat.dto';
 import { FilterCatDto } from './dto/filterCatColor.dto';
+import { CatsCrud } from './cats.crud';
 
 @Controller('cats')
 export class CatsController {
-  constructor(private readonly catsService: CatsService) {}
+  constructor(
+      @Inject(CATS_SERVICE)
+      private readonly catsService: CatsCrud,
+    ) {}
 
   @Get()
   findAll() {

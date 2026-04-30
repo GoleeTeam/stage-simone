@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CatsController } from './cats.controller';
+import { CATS_SERVICE, CatsController } from './cats.controller';
 import { CATS_REPOSITORY, CatsService } from './cats.service';
 import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
 import { CatsFakeRepository } from './repo/catsFake.repository';
@@ -7,7 +7,10 @@ import { CatsFakeRepository } from './repo/catsFake.repository';
 @Module({
   controllers: [CatsController],
   providers: [
-    CatsService,
+    {
+      provide: CATS_SERVICE,
+      useClass: CatsService,
+    },
     {
       provide: CATS_REPOSITORY,
       useClass: CatsFakeRepository,
