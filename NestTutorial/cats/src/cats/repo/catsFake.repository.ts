@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Cat } from '../domain/cat.interface';
+import { Cat } from '../domain/cat.class';
 import { CatColor } from '../domain/cats.color.enum';
 import { CatsRepository } from './cats.repository';
 

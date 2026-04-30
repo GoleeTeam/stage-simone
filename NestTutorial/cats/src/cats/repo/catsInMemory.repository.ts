@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Cat } from '../domain/cat.interface';
+import { Cat } from '../domain/cat.class';
 import { CatColor } from '../domain/cats.color.enum';
 import { CatsRepository } from './cats.repository';
 
@@ -30,9 +30,13 @@ export class CatsInMemoryRepository implements CatsRepository {
     this.save(cat);
   }
 
-  remove(id: string, color: CatColor): void {
-    this.catsById.delete(id);
-    this.catsByColor.get(color)?.delete(id);
+  remove(id: string): void {
+    const cat = this.findOne(id);
+    if(!cat)
+    {
+      this.catsById.delete(id);
+      this.catsByColor.get(cat!.color)?.delete(id);
+    }
   }
 
   findAll(): Cat[] {

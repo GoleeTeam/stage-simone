@@ -1,4 +1,4 @@
-import { Cat } from '../domain/cat.interface';
+import { Cat } from '../domain/cat.class';
 import { CatColor } from '../domain/cats.color.enum';
 
 export interface CatsRepository {
@@ -6,7 +6,7 @@ export interface CatsRepository {
 
   update(id: string, cat: Cat): void;
 
-  remove(id: string, color: CatColor): void;
+  remove(id: string): void;
 
   findAll(): Cat[];
 

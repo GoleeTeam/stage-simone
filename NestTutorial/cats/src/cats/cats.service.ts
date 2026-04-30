@@ -1,7 +1,7 @@
 export const CATS_REPOSITORY = 'CATS_REPOSITORY';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
-import { Cat } from './domain/cat.interface';
+import { Cat } from './domain/cat.class';
 import { CatColor } from './domain/cats.color.enum';
 import { CreateCatDto } from './dto/createCat.dto';
 import { CatsRepository } from './repo/cats.repository';
@@ -61,7 +61,7 @@ export class CatsService implements CatsCrud{
       throw new NotFoundException(`Cat with id ${id} not found`);
     }
 
-    this.repo.remove(id, cat.color);
+    this.repo.remove(id);
 
     const res: MessageCat = {
       message:'Cat deleted',

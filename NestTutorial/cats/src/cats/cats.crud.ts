@@ -1,5 +1,5 @@
 
-import { Cat } from './domain/cat.interface';
+import { Cat } from './domain/cat.class';
 import { CatColor } from './domain/cats.color.enum';
 import { CreateCatDto } from './dto/createCat.dto';
 import { MessageCat } from './domain/messageCat.interface';

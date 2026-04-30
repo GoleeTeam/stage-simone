@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Cat } from './domain/cat.interface';
+import { Cat } from './domain/cat.class';
 import { CatColor } from './domain/cats.color.enum';
 import { CreateCatDto } from './dto/createCat.dto';
 import { ColorNotFoundException } from './exceptions/color-not-found.exception';
