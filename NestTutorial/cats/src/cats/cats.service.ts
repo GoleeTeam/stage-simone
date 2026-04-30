@@ -7,7 +7,7 @@ import { CreateCatDto } from './dto/createCat.dto';
 import { CatsRepository } from './repo/cats.repository';
 import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
 import { CatsCrud } from './cats.crud';
-import { MessageCat } from './domain/messageCat.interface';
+import { MessageCat } from './dto/messageCat.dto';
 
 @Injectable()
 export class CatsService implements CatsCrud{
@@ -16,7 +16,7 @@ export class CatsService implements CatsCrud{
     private readonly repo: CatsRepository,
   ) {}
 
-  create(catDto: CreateCatDto) {
+  async create(catDto: CreateCatDto): Promise<MessageCat>  {
     const newCat: Cat = {
       id: uuid(),
       name: catDto.name,
@@ -33,8 +33,8 @@ export class CatsService implements CatsCrud{
     return res;
   }
 
-  update(id: string, catDto: CreateCatDto) {
-    const cat = this.repo.findOne(id);
+  async update(id: string, catDto: CreateCatDto): Promise<MessageCat>  {
+    const cat = await this.repo.findOne(id);
     if (!cat) {
       throw new NotFoundException(`Cat with id ${id} not found`);
     }
@@ -46,7 +46,7 @@ export class CatsService implements CatsCrud{
       color: catDto.color,
     };
 
-    this.repo.update(toUpdateCat.id, toUpdateCat);
+    await this.repo.update(toUpdateCat.id, toUpdateCat);
 
     const res: MessageCat = {
       message:'cat updated',
@@ -55,13 +55,13 @@ export class CatsService implements CatsCrud{
     return res;
   }
 
-  remove(id: string) {
-    const cat = this.repo.findOne(id);
+  async remove(id: string): Promise<MessageCat>  {
+    const cat = await this.repo.findOne(id);
     if (!cat) {
       throw new NotFoundException(`Cat with id ${id} not found`);
     }
 
-    this.repo.remove(id);
+    await this.repo.remove(id);
 
     const res: MessageCat = {
       message:'Cat deleted',
@@ -70,17 +70,18 @@ export class CatsService implements CatsCrud{
     return res;
   }
 
-  findAll() {
-    return this.repo.findAll();
+  async findAll() {
+    return await this.repo.findAll();
   }
 
-  filterByColor(color: CatColor) {
-    const cats = this.repo.filterByColor(color);
+  async filterByColor(color: CatColor) {
+    const cats = await this.repo.filterByColor(color);
     return cats;
   }
 
-  findOne(id: string) {
-    const cat = this.repo.findOne(id);
+  async findOne(id: string) {
+    const cat = await this.repo.findOne(id);
+    
     if (!cat) {
       throw new NotFoundException(`Cat with id ${id} not found`);
     }

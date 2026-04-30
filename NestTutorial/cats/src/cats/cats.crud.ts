@@ -2,19 +2,19 @@
 import { Cat } from './domain/cat.class';
 import { CatColor } from './domain/cats.color.enum';
 import { CreateCatDto } from './dto/createCat.dto';
-import { MessageCat } from './domain/messageCat.interface';
+import { MessageCat } from './dto/messageCat.dto';
 
 export interface CatsCrud {
 
-  create(catDto: CreateCatDto): MessageCat;
+  create(catDto: CreateCatDto): Promise<MessageCat>;
 
-  update(id: string, catDto: CreateCatDto): MessageCat;
+  update(id: string, catDto: CreateCatDto): Promise<MessageCat>;
 
-  remove(id: string): MessageCat;
+  remove(id: string): Promise<MessageCat>;
 
-  findAll(): void;
+  findAll(): Promise<Cat[]>;
 
-  filterByColor(color: CatColor): Cat[];
+  filterByColor(color: CatColor): Promise<Cat[]>;
 
-  findOne(id: string): Cat;
+  findOne(id: string): Promise<Cat | undefined>;
 }

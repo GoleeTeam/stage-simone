@@ -2,15 +2,15 @@ import { Cat } from '../domain/cat.class';
 import { CatColor } from '../domain/cats.color.enum';
 
 export interface CatsRepository {
-  save(cat: Cat): void;
+  save(cat: Cat): Promise<void>;
 
-  update(id: string, cat: Cat): void;
+  update(id: string, cat: Cat): Promise<void>;
 
-  remove(id: string): void;
+  remove(id: string): Promise<void>;
 
-  findAll(): Cat[];
+  findAll(): Promise<Cat[]>;
 
-  findOne(id: string): Cat | undefined;
+  findOne(id: string): Promise<Cat | undefined>;
 
-  filterByColor(color: CatColor): Cat[];
+  filterByColor(color: CatColor): Promise<Cat[]>;
 }

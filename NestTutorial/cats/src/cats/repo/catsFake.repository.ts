@@ -7,29 +7,30 @@ import { CatsRepository } from './cats.repository';
 export class CatsFakeRepository implements CatsRepository {
   private cats: Cat[] = [];
 
-  save(cat: Cat): void {
+  async save(cat: Cat): Promise<void> {
     this.cats.push(cat);
   }
 
-  update(id: string, cat: Cat): void {
+  async update(id: string, cat: Cat): Promise<void> {
     const index = this.cats.findIndex((c) => c.id === id);
     if (index === -1) return;
+
     this.cats[index] = cat;
   }
 
-  remove(id: string): void {
+  async remove(id: string): Promise<void> {
     this.cats = this.cats.filter((c) => c.id !== id);
   }
 
-  findAll(): Cat[] {
+  async findAll(): Promise<Cat[]> {
     return this.cats;
   }
 
-  findOne(id: string): Cat | undefined {
+  async findOne(id: string): Promise<Cat | undefined> {
     return this.cats.find((c) => c.id === id);
   }
 
-  filterByColor(color: CatColor): Cat[] {
+  async filterByColor(color: CatColor): Promise<Cat[]> {
     return this.cats.filter((c) => c.color === color);
   }
 }

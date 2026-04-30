@@ -15,12 +15,12 @@ export class CatsInMemoryRepository implements CatsRepository {
     this.catsByColor.get(cat.color)!.add(cat.id);
   }
 
-  save(cat: Cat): void {
+  async save(cat: Cat): Promise<void> {
     this.catsById.set(cat.id, cat);
     this.addCatsByColor(cat);
   }
 
-  update(id: string, cat: Cat): void {
+  async update(id: string, cat: Cat): Promise<void> {
     const oldCat = this.catsById.get(id);
 
     if (oldCat) {
@@ -30,27 +30,27 @@ export class CatsInMemoryRepository implements CatsRepository {
     this.save(cat);
   }
 
-  remove(id: string): void {
-    const cat = this.findOne(id);
-    if(!cat)
-    {
-      this.catsById.delete(id);
-      this.catsByColor.get(cat!.color)?.delete(id);
-    }
+  async remove(id: string): Promise<void> {
+    const cat = this.catsById.get(id);
+
+    if (!cat) return;
+
+    this.catsById.delete(id);
+    this.catsByColor.get(cat.color)?.delete(id);
   }
 
-  findAll(): Cat[] {
+  async findAll(): Promise<Cat[]> {
     return Array.from(this.catsById.values());
   }
 
-  findOne(id: string): Cat | undefined {
-    const cat = this.catsById.get(id);
-    return cat;
+  async findOne(id: string): Promise<Cat | undefined> {
+    return this.catsById.get(id);
   }
 
-  filterByColor(color: CatColor): Cat[] {
+  async filterByColor(color: CatColor): Promise<Cat[]> {
     const ids = this.catsByColor.get(color);
     if (!ids) return [];
+
     return Array.from(ids)
       .map((id) => this.catsById.get(id))
       .filter((cat): cat is Cat => cat !== undefined);
