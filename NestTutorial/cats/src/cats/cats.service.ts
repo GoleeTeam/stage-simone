@@ -17,6 +17,7 @@ export class CatsService implements CatsCrud{
   ) {}
 
   async create(catDto: CreateCatDto): Promise<MessageCat>  {
+    console.log("create service");
     const newCat: Cat = {
       id: uuid(),
       name: catDto.name,
@@ -24,7 +25,7 @@ export class CatsService implements CatsCrud{
       color: catDto.color,
     };
 
-    this.repo.save(newCat);
+    await this.repo.save(newCat);
 
     const res: MessageCat = {
       message:'cat created',
@@ -71,6 +72,7 @@ export class CatsService implements CatsCrud{
   }
 
   async findAll() {
+    console.log("findAll service");
     return await this.repo.findAll();
   }
 

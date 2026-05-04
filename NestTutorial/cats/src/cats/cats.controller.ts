@@ -17,7 +17,7 @@ import { FilterCatDto } from './dto/filterCatColor.dto';
 import { CatsCrud } from './cats.crud';
 
 @Controller('cats')
-export class CatsController {
+export class CatsController{
   constructor(
       @Inject(CATS_SERVICE)
       private readonly catsService: CatsCrud,
@@ -25,11 +25,12 @@ export class CatsController {
 
   @Get()
   findAll() {
+    console.log("findAll controller");
     return this.catsService.findAll();
   }
 
   @Get('search')
-  findByColor(@Query() query: FilterCatDto) {
+  filterByColor(@Query() query: FilterCatDto) {
     return this.catsService.filterByColor(query.color);
   }
 
@@ -40,6 +41,7 @@ export class CatsController {
 
   @Post()
   create(@Body() createCatDto: CreateCatDto) {
+    console.log("create controller");
     return this.catsService.create(createCatDto);
   }
 

@@ -15,6 +15,7 @@ export class CatsMongoRepository implements CatsRepository {
   ) {}
 
   async save(cat: Cat): Promise<void> {
+    console.log("create repo");
     await this.catModel.create(cat);
   }
 
@@ -27,6 +28,7 @@ export class CatsMongoRepository implements CatsRepository {
   }
 
   async findAll(): Promise<Cat[]> {
+    console.log("findAll repo");
     const cats = await this.catModel.find().lean();
 
     return cats.map(cat => ({

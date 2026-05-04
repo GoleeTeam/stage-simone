@@ -3,6 +3,7 @@ import { CATS_SERVICE, CatsController } from './cats.controller';
 import { CATS_REPOSITORY, CatsService } from './cats.service';
 import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
 import { CatsFakeRepository } from './repo/catsFake.repository';
+import { CatsMongoRepository } from './repo/catsMongo.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CatSchema } from './schemas/cat.schema';
 import { Cat } from './domain/cat.class'
@@ -16,7 +17,7 @@ import { Cat } from './domain/cat.class'
     },
     {
       provide: CATS_REPOSITORY,
-      useClass: CatsFakeRepository,
+      useClass: CatsMongoRepository,
     },
   ],
   imports: [
