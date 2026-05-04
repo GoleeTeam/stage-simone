@@ -3,11 +3,11 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { Cat } from './domain/cat.class';
 import { CatColor } from './domain/cats.color.enum';
-import { CreateCatDto } from './dto/createCat.dto';
 import { CatsRepository } from './repo/cats.repository';
 import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
 import { CatsCrud } from './cats.crud';
 import { MessageCat } from './dto/messageCat.dto';
+import { CreateCatInput } from './dto/input/createCatInput.dto';
 
 @Injectable()
 export class CatsService implements CatsCrud{
@@ -16,13 +16,13 @@ export class CatsService implements CatsCrud{
     private readonly repo: CatsRepository,
   ) {}
 
-  async create(catDto: CreateCatDto): Promise<MessageCat>  {
+  async create(input: CreateCatInput): Promise<MessageCat>  {
     console.log("create service");
     const newCat: Cat = {
       id: uuid(),
-      name: catDto.name,
-      age: catDto.age,
-      color: catDto.color,
+      name: input.name,
+      age: input.age,
+      color: input.color,
     };
 
     await this.repo.save(newCat);
@@ -34,7 +34,7 @@ export class CatsService implements CatsCrud{
     return res;
   }
 
-  async update(id: string, catDto: CreateCatDto): Promise<MessageCat>  {
+  async update(id: string, input: CreateCatInput): Promise<MessageCat>  {
     const cat = await this.repo.findOne(id);
     if (!cat) {
       throw new NotFoundException(`Cat with id ${id} not found`);
@@ -42,9 +42,9 @@ export class CatsService implements CatsCrud{
 
     const toUpdateCat: Cat = {
       id: cat.id,
-      name: catDto.name,
-      age: catDto.age,
-      color: catDto.color,
+      name: input.name,
+      age: input.age,
+      color: input.color,
     };
 
     await this.repo.update(toUpdateCat.id, toUpdateCat);

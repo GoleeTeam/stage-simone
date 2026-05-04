@@ -7,9 +7,10 @@ import { CatsMongoRepository } from './repo/catsMongo.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CatSchema } from './schemas/cat.schema';
 import { Cat } from './domain/cat.class'
+import { GattiController } from './gatti.controller';
 
 @Module({
-  controllers: [CatsController],
+  controllers: [CatsController, GattiController],
   providers: [
     {
       provide: CATS_SERVICE,
@@ -17,7 +18,7 @@ import { Cat } from './domain/cat.class'
     },
     {
       provide: CATS_REPOSITORY,
-      useClass: CatsMongoRepository,
+      useClass: CatsFakeRepository,
     },
   ],
   imports: [
