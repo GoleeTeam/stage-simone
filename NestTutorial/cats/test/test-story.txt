@@ -1,0 +1,39 @@
+get -> verificare array vuoto 
+post -> creazione di un gatto1 con parametri sbagliati 
+post -> creazione di un gatto1 con parametri giusti
+gatto1 = {leffe, 2, orange}
+get: gatto1.id -> verificare che il gatto1 esista
+get: id non valido -> verificare lancio errore corretto
+get: id valido ma non esistente -> verificare lancio errore corretto
+get -> verificare che sia ritornato il gatto1
+get: color white -> verificare array vuoto 
+get: color orange -> verificare che sia ritornato il gatto1
+get search: senza color -> 400
+get search: color non valido -> 400
+
+post -> creazione di un gatto2 diverso con parametri giusti
+gatto2 = {due, 14, black}
+get: gatto2.id -> verificare che il gatto2 esista
+get -> verificare che sia ritornato il gatto2
+get: color white -> verificare array vuoto 
+get: color orange -> verificare che sia ritornato il gatto1
+get: color black -> verificare che sia ritornato il gatto2
+
+put: gatto2.id -> cambiare il colore in orange
+put: id non uuid -> 400
+put: uuid valido ma inesistente -> 404
+put: body sbagliato -> 400
+get: color orange -> verificare che sia ritornato il gatto1 e gatto2
+get: color black -> verificare l'array sia vuoto
+
+delete: gatto2.id -> verificare che funzioni
+delete: id non uuid -> 400
+delete: uuid valido ma inesistente -> 404
+get: gatto1.id -> verificare che il gatto1 esista
+get: gatto2.id -> verificare che il gatto2 non esista
+get -> verificare che sia ritornato solo il gatto1
+get: color white -> verificare array vuoto 
+get: color orange -> verificare che sia ritornato il gatto1
+get: color black -> verificare array vuoto 
+
++ copia per /gatti

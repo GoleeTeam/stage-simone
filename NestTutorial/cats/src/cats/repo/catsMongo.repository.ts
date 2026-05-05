@@ -15,44 +15,45 @@ export class CatsMongoRepository implements CatsRepository {
   ) {}
 
   async save(cat: Cat): Promise<void> {
-    console.log("create repo");
     await this.catModel.create(cat);
   }
 
   async update(id: string, cat: Cat): Promise<void> {
-    await this.catModel.updateOne({ _id: id }, cat);
+    await this.catModel.updateOne({ id }, cat);
   }
 
   async remove(id: string): Promise<void> {
-    await this.catModel.deleteOne({ _id: id });
+    await this.catModel.deleteOne({ id });
   }
 
   async findAll(): Promise<Cat[]> {
-    console.log("findAll repo");
     const cats = await this.catModel.find().lean();
 
-    return cats.map(cat => ({
-        ...cat,
-        color: cat.color as CatColor,
-    }));
-    }
+    return cats.map((cat) => this.toDomain(cat));
+  }
 
   async findOne(id: string): Promise<Cat | undefined> {
-    const cat = await this.catModel.findById(id).lean();
-    if (!cat) return undefined;
+    const cat = await this.catModel.findOne({ id }).lean();
 
-    return {
-        ...cat,
-        color: cat.color as CatColor,
-    };
+    if (!cat) {
+      return undefined;
     }
+
+    return this.toDomain(cat);
+  }
 
   async filterByColor(color: CatColor): Promise<Cat[]> {
     const cats = await this.catModel.find({ color }).lean();
 
-    return cats.map(cat => ({
-        ...cat,
-        color: cat.color as CatColor,
-    }));
-    }
+    return cats.map((cat) => this.toDomain(cat));
+  }
+
+  private toDomain(cat: CatDocument): Cat {
+    return {
+      id: cat.id,
+      name: cat.name,
+      age: cat.age,
+      color: cat.color as CatColor,
+    };
+  }
 }

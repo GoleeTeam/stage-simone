@@ -1,5 +1,5 @@
 import { CreateCatDto } from '../createCat.dto';
-import { CreateCatInput } from '../input/createCatInput.dto';
+import { CreateCatInput } from '../input/createCatInput';
 
 export function mapCat(dto: CreateCatDto): CreateCatInput {
   return {

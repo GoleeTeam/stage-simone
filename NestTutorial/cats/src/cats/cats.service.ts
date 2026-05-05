@@ -7,7 +7,7 @@ import { CatsRepository } from './repo/cats.repository';
 import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
 import { CatsCrud } from './cats.crud';
 import { MessageCat } from './dto/messageCat.dto';
-import { CreateCatInput } from './dto/input/createCatInput.dto';
+import { CreateCatInput } from './dto/input/createCatInput';
 
 @Injectable()
 export class CatsService implements CatsCrud{
