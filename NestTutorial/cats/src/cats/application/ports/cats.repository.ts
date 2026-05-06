@@ -1,5 +1,5 @@
-import { Cat } from '../domain/cat.class';
-import { CatColor } from '../domain/cats.color.enum';
+import { Cat } from '../../domain/cat.class';
+import { CatColor } from '../../domain/cats.color.enum';
 
 export interface CatsRepository {
   save(cat: Cat): Promise<void>;

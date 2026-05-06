@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Cat } from '../domain/cat.class';
-import { CatColor } from '../domain/cats.color.enum';
-import { CatsRepository } from './cats.repository';
+import { Cat } from '../../domain/cat.class';
+import { CatColor } from '../../domain/cats.color.enum';
+import { CatsRepository } from '../../application/ports/cats.repository';
 
 @Injectable()
 export class CatsFakeRepository implements CatsRepository {

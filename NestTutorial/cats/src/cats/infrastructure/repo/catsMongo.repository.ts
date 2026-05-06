@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-
-import { Cat } from '../domain/cat.class';
-import { CatColor } from '../domain/cats.color.enum';
-import { CatsRepository } from '../repo/cats.repository';
+import { Cat } from '../../domain/cat.class';
+import { CatColor } from '../../domain/cats.color.enum';
+import { CatsRepository } from '../../application/ports/cats.repository';
 import { CatDocument } from '../schemas/cat.schema';
 
 @Injectable()

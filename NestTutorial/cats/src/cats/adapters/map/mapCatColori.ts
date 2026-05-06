@@ -1,6 +1,6 @@
 import { CatColor } from "../../domain/cats.color.enum";
 import { CatColori } from "../../domain/cats.colori.enum";
-import { CatColorInput } from "../input/filterCatColorInput";
+import { CatColorInput } from "../../application/input/filterCatColorInput";
 
 export function mapCatColori(color: CatColori): CatColorInput {
     switch (color) {

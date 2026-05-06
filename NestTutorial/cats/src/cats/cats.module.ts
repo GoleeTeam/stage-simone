@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { CATS_SERVICE, CatsController } from './cats.controller';
-import { CATS_REPOSITORY, CatsService } from './cats.service';
-import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
-import { CatsFakeRepository } from './repo/catsFake.repository';
-import { CatsMongoRepository } from './repo/catsMongo.repository';
+import { CATS_SERVICE, CatsController } from './adapters/cats.controller';
+import { CATS_REPOSITORY, CatsService } from './application/cats.service';
+import { CatsInMemoryRepository } from './infrastructure/repo/catsInMemory.repository';
+import { CatsFakeRepository } from './infrastructure/repo/catsFake.repository';
+import { CatsMongoRepository } from './infrastructure/repo/catsMongo.repository';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CatSchema } from './schemas/cat.schema';
+import { CatSchema } from './infrastructure/schemas/cat.schema';
 import { Cat } from './domain/cat.class'
-import { GattiController } from './gatti.controller';
+import { GattiController } from './adapters/gatti.controller';
 
 @Module({
   controllers: [CatsController, GattiController],

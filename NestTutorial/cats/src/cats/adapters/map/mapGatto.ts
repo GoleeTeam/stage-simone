@@ -1,5 +1,5 @@
-import { CreateGattoDto } from '../createGatto.dto';
-import { CreateCatInput } from '../input/createCatInput';
+import { CreateGattoDto } from '../dto/createGatto.dto';
+import { CreateCatInput } from '../../application/input/createCatInput';
 import { mapCatColori } from './mapCatColori';
 
 export function mapGatto(dto: CreateGattoDto): CreateCatInput {

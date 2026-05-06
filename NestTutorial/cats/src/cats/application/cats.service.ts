@@ -1,13 +1,12 @@
 export const CATS_REPOSITORY = 'CATS_REPOSITORY';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
-import { Cat } from './domain/cat.class';
-import { CatColor } from './domain/cats.color.enum';
-import { CatsRepository } from './repo/cats.repository';
-import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
-import { CatsCrud } from './cats.crud';
-import { MessageCat } from './dto/messageCat.dto';
-import { CreateCatInput } from './dto/input/createCatInput';
+import { Cat } from '../domain/cat.class';
+import { CatColor } from '../domain/cats.color.enum';
+import { CatsRepository } from './ports/cats.repository';
+import { CatsCrud } from './ports/cats.crud';
+import { MessageCat } from '../adapters/dto/messageCat.dto';
+import { CreateCatInput } from './input/createCatInput';
 
 @Injectable()
 export class CatsService implements CatsCrud{

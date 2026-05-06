@@ -11,16 +11,14 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/createCat.dto';
-import { FilterCatColoriDto } from './dto/filterCatColori.dto';
-import { CatsCrud } from './cats.crud';
-import { mapGatto } from './dto/map/mapGatto';
-import { CreateGattoDto } from './dto/createGatto.dto';
-import { mapCatColori } from './dto/map/mapCatColori';
+import { FilterCatColorDto } from './dto/filterCatColor.dto';
+import { CatsCrud } from '../application/ports/cats.crud';
+import { mapCat } from './map/mapCat';
+import { mapCatColor } from './map/mapCatColor';
 
-@Controller('gatti')
-export class GattiController{
+@Controller('cats')
+export class CatsController{
   constructor(
       @Inject(CATS_SERVICE)
       private readonly catsService: CatsCrud,
@@ -31,11 +29,11 @@ export class GattiController{
     return this.catsService.findAll();
   }
 
-  @Get('cerca')
-  filterByColor(@Query() query: FilterCatColoriDto) {
-    const input = mapCatColori(query.color);
+  @Get('search')
+  filterByColor(@Query() query: FilterCatColorDto) {
+    const input = mapCatColor(query.color);
     return this.catsService.filterByColor(input);
-  }
+  }                                            
 
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
@@ -43,17 +41,17 @@ export class GattiController{
   }
 
   @Post()
-  create(@Body() createGattoDto: CreateGattoDto) {
-    const input = mapGatto(createGattoDto);
+  create(@Body() createCatDto: CreateCatDto) {
+    const input = mapCat(createCatDto);
     return this.catsService.create(input);
   }
 
   @Put(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() createGattoDto: CreateGattoDto,
+    @Body() createCatDto: CreateCatDto,
   ) {
-    const input = mapGatto(createGattoDto);
+    const input = mapCat(createCatDto);
     return this.catsService.update(id, input);
   }
 

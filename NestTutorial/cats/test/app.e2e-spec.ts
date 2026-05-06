@@ -2,13 +2,20 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Cat } from '../src/cats/domain/cat.class';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
-import { CatsController, CATS_SERVICE } from '../src/cats/cats.controller';
-import { CatsService, CATS_REPOSITORY } from '../src/cats/cats.service';
-import { GattiController } from '../src/cats/gatti.controller';
-import { CatsMongoRepository } from '../src/cats/repo/catsMongo.repository';
+import { CatsController, CATS_SERVICE } from '../src/cats/adapters/cats.controller';
+import { CatsService, CATS_REPOSITORY } from '../src/cats/application/cats.service';
+import { GattiController } from '../src/cats/adapters/gatti.controller';
+import { CatsMongoRepository } from '../src/cats/infrastructure/repo/catsMongo.repository';
 import { getConnectionToken, getModelToken, MongooseModule } from '@nestjs/mongoose';
-import { CatDocument, CatSchema } from '../src/cats/schemas/cat.schema';
+import { CatDocument, CatSchema } from '../src/cats/infrastructure/schemas/cat.schema';
 import { Connection, Model } from 'mongoose';
+import { webcrypto } from 'crypto';
+
+jest.setTimeout(30000);
+
+Object.defineProperty(globalThis, 'crypto', {
+  value: webcrypto,
+});
 
 describe('CatsController + GattiController (e2e)', () => {
   let app: INestApplication;

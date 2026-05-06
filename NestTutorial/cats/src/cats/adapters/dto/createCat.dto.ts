@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { CatColor } from '../domain/cats.color.enum';
+import { CatColor } from '../../domain/cats.color.enum';
 
 export class CreateCatDto {
   @IsString()

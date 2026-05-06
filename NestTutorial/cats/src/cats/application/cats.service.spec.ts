@@ -1,15 +1,13 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { Cat } from './domain/cat.class';
-import { CatColor } from './domain/cats.color.enum';
-import { CreateCatDto } from './dto/createCat.dto';
+import { Cat } from '../domain/cat.class';
+import { CatColor } from '../domain/cats.color.enum';
+import { CreateCatInput } from './input/createCatInput';
 
 import { CATS_REPOSITORY, CatsService } from './cats.service';
-import { CatsFakeRepository } from './repo/catsFake.repository';
-import { CatsInMemoryRepository } from './repo/catsInMemory.repository';
-import { CatsMongoRepository } from './repo/catsMongo.repository';
-import { CatsRepository } from './repo/cats.repository';
+import { CatsInMemoryRepository } from '../infrastructure/repo/catsInMemory.repository';
+import { CatsRepository } from './ports/cats.repository';
 
 jest.mock('uuid', () => ({ v4: () => 'mock-uuid-1234' }));
 
@@ -24,7 +22,7 @@ describe('CatsService', () => {
     color: CatColor.BLACK,
   };
 
-  const createCatDto: CreateCatDto = {
+  const createCatInput: CreateCatInput = {
     name: 'Whiskers',
     age: 3,
     color: CatColor.BLACK,
@@ -48,7 +46,7 @@ describe('CatsService', () => {
   // ---------------- CREATE ----------------
   describe('create', () => {
     it('should create a cat and return message with id', async () => {
-      const result = await service.create(createCatDto);
+      const result = await service.create(createCatInput);
 
       expect(result).toEqual({
         message: 'cat created',
@@ -60,15 +58,15 @@ describe('CatsService', () => {
   // ---------------- UPDATE ----------------
   describe('update', () => {
     it('should update an existing cat', async () => {
-      await service.create(createCatDto);
+      await service.create(createCatInput);
 
-      const dto: CreateCatDto = {
+      const input: CreateCatInput = {
         name: 'Felix',
         age: 5,
         color: CatColor.WHITE,
       };
 
-      const result = await service.update(catFixture.id, dto);
+      const result = await service.update(catFixture.id, input);
 
       expect(result).toEqual({
         message: 'cat updated',
@@ -78,7 +76,7 @@ describe('CatsService', () => {
 
     it('should throw if cat not found', async () => {
       await expect(
-        service.update('bad-id', createCatDto),
+        service.update('bad-id', createCatInput),
       ).rejects.toThrow(NotFoundException);
     });
   });
@@ -86,7 +84,7 @@ describe('CatsService', () => {
   // ---------------- REMOVE ----------------
   describe('remove', () => {
     it('should remove an existing cat', async () => {
-      await service.create(createCatDto);
+      await service.create(createCatInput);
 
       const result = await service.remove(catFixture.id);
 
@@ -106,7 +104,7 @@ describe('CatsService', () => {
   // ---------------- FIND ALL ----------------
   describe('findAll', () => {
     it('should return all cats', async () => {
-      await service.create(createCatDto);
+      await service.create(createCatInput);
 
       const result = await service.findAll();
 
@@ -117,7 +115,7 @@ describe('CatsService', () => {
   // ---------------- FILTER BY COLOR ----------------
   describe('filterByColor', () => {
     it('should return cats of given color', async () => {
-      await service.create(createCatDto);
+      await service.create(createCatInput);
 
       const result = await service.filterByColor(CatColor.BLACK);
 
@@ -134,7 +132,7 @@ describe('CatsService', () => {
   // ---------------- FIND ONE ----------------
   describe('findOne', () => {
     it('should return a cat', async () => {
-      await service.create(createCatDto);
+      await service.create(createCatInput);
 
       const result = await service.findOne(catFixture.id);
 
