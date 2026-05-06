@@ -9,7 +9,6 @@ import { CatsMongoRepository } from '../src/cats/repo/catsMongo.repository';
 import { getConnectionToken, getModelToken, MongooseModule } from '@nestjs/mongoose';
 import { CatDocument, CatSchema } from '../src/cats/schemas/cat.schema';
 import { Connection, Model } from 'mongoose';
-import { webcrypto } from 'crypto';
 
 describe('CatsController + GattiController (e2e)', () => {
   let app: INestApplication;
