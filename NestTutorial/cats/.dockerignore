@@ -1,0 +1,10 @@
+node_modules
+dist
+coverage
+coverage-e2e
+.git
+.vscode
+Dockerfile
+docker-compose.yml
+npm-debug.log
+pnpm-debug.log
