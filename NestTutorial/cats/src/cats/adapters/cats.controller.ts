@@ -16,13 +16,15 @@ import { FilterCatColorDto } from './dto/filterCatColor.dto';
 import { CatsCrud } from '../application/ports/cats.crud';
 import { mapCat } from './map/mapCat';
 import { mapCatColor } from './map/mapCatColor';
+import { Throttle } from '@nestjs/throttler';
+import { THROTTLER_CONFIG } from 'src/throttler.config';
 
 @Controller('cats')
-export class CatsController{
+export class CatsController {
   constructor(
-      @Inject(CATS_SERVICE)
-      private readonly catsService: CatsCrud,
-    ) {}
+    @Inject(CATS_SERVICE)
+    private readonly catsService: CatsCrud,
+  ) {}
 
   @Get()
   findAll() {
@@ -33,13 +35,14 @@ export class CatsController{
   filterByColor(@Query() query: FilterCatColorDto) {
     const input = mapCatColor(query.color);
     return this.catsService.filterByColor(input);
-  }                                            
+  }
 
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.catsService.findOne(id);
   }
 
+  @Throttle({ auth: THROTTLER_CONFIG.auth })
   @Post()
   create(@Body() createCatDto: CreateCatDto) {
     const input = mapCat(createCatDto);

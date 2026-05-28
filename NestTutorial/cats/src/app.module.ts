@@ -2,16 +2,26 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { THROTTLER_CONFIG } from './throttler.config';
 @Module({
   imports: [
     CatsModule,
-    MongooseModule.forRoot(
-      process.env.MONGO_URI ?? 'mongodb://localhost:27017/nome-db',
-    ),
+    ThrottlerModule.forRoot([
+      { name: 'auth', ...THROTTLER_CONFIG.auth },
+      { name: 'public', ...THROTTLER_CONFIG.public },
+      { name: 'internal', ...THROTTLER_CONFIG.internal },
+    ]),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

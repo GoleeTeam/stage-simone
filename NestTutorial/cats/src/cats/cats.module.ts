@@ -6,7 +6,7 @@ import { CatsFakeRepository } from './infrastructure/repo/catsFake.repository';
 import { CatsMongoRepository } from './infrastructure/repo/catsMongo.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CatSchema } from './infrastructure/schemas/cat.schema';
-import { Cat } from './domain/cat.class'
+import { Cat } from './domain/cat.class';
 import { GattiController } from './adapters/gatti.controller';
 
 @Module({
@@ -18,13 +18,8 @@ import { GattiController } from './adapters/gatti.controller';
     },
     {
       provide: CATS_REPOSITORY,
-      useClass: CatsFakeRepository,
+      useClass: CatsInMemoryRepository,
     },
-  ],
-  imports: [
-    MongooseModule.forFeature([
-      { name:Cat.name, schema:CatSchema },
-    ]),
   ],
 })
 export class CatsModule {}
